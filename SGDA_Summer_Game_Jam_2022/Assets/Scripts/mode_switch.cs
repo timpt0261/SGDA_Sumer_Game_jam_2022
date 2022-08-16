@@ -43,7 +43,14 @@ public class mode_switch : MonoBehaviour
             check = false;
 
             Movement_Mode();
-           
+
+            float horizontal = Input.GetAxisRaw("Horizontal");
+            float vertical = Input.GetAxisRaw("Vertical");
+
+            Vector2 dir = new Vector2(horizontal, vertical);
+
+            rb.velocity = dir * speed * Time.fixedDeltaTime;
+
         }
 
 

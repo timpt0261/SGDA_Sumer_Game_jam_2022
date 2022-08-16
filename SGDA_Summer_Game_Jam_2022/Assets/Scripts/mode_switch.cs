@@ -9,7 +9,7 @@ public class mode_switch : MonoBehaviour
     private bool Is_human = true;
 
     float start_time = 0, pressed_time = 0;
-    float cool_time = 3.0f;
+    public float cool_time = 3.0f; //time it shoul take for player to switch between ghost and human mode
     bool check = false;
 
 
@@ -24,12 +24,7 @@ public class mode_switch : MonoBehaviour
 
     void Update()
     {
-        
-        // play animation to switch to ghost
-
-        // is ghost skin
-
-        // if player is ghost and the left buttton is pressedhold for 1.5 sec
+       // if player is ghost and the left buttton is pressedhold for 1.5 sec
         if (Input.GetMouseButtonDown(0) && !check)
         {
             start_time = Time.time;
@@ -42,14 +37,13 @@ public class mode_switch : MonoBehaviour
         {
             check = false;
         }
-
+        // if the current time and the tiem the left button is 
         if (Time.time >= pressed_time && check)
         {
             check = false;
 
             Movement_Mode();
-            //Debug.Log("Left Mouse button pressed for more than 3 secs");
-
+           
         }
 
 
@@ -75,6 +69,13 @@ public class mode_switch : MonoBehaviour
             Is_human = true;
             return;
         }
+
+        // play animation from human to ghost
+        // switch to ghost skin
+
+        // only able two direction 
+        // not able to move through physical enemies
+        // has gravity mass of one
 
         Debug.Log("In Ghost Mode");
         Is_human = false;

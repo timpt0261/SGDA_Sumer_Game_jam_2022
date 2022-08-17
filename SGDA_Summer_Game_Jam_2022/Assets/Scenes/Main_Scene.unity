@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug_Mode: 0
-  gravity: 2.5
+  gravity: 20.5
   speed: 200
   cool_time: 3
 --- !u!1 &406827699

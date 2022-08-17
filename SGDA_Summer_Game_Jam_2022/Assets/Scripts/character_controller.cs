@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class mode_switch : MonoBehaviour
+public class character_controller : MonoBehaviour
 {
     public bool debug_Mode;
     public float gravity = 20.5f;

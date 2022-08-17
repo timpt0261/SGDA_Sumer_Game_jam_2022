@@ -58,12 +58,11 @@ public class mode_switch : MonoBehaviour
 
             // only able to move left and right two direction 
 
-            // not able to move through physical enemies
+            // able to move through physical enemies
 
             // has gravity mass of one
             rb.gravityScale = 1;
             Debug.Log("In Human mode");
-
             Is_human = true;
             return;
         }

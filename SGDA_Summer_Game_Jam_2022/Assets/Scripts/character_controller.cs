@@ -29,10 +29,13 @@ public class character_controller : MonoBehaviour
 
     void Update()
     {
-      
+        //gravit dependent of mode
+        rb.gravityScale = Is_human ? gravity : 0;
+ 
         horizontal = Input.GetAxisRaw("Horizontal");
         // able to move 2 or 4 directions depending on mode
         vertical = !Is_human ? Input.GetAxisRaw("Vertical") : 0;
+        
        
      
 
@@ -57,7 +60,7 @@ public class character_controller : MonoBehaviour
         {
             check = false;
 
-            Movement_Mode();
+            Is_human = !Is_human;
 
         }
        
@@ -65,48 +68,6 @@ public class character_controller : MonoBehaviour
 
         rb.velocity = dir * speed * Time.fixedDeltaTime;
 
-
-    }
-
-    // Determines if player in human mode or ghost mode
-    void Movement_Mode()
-    {
-       
-
-        if (!Is_human)
-        {
-            // play animation from human to ghost
-            // switch to human skin
-
-            // only able to move left and right two direction 
-            vertical = 0;
-
-            // able to move through physical enemies
-
-            // has gravity
-            rb.gravityScale = gravity;
-            if (debug_Mode) {
-                Debug.Log("In Human mode");
-            }
-           
-            Is_human = true;
-            return;
-        }
-
-        // play animation from human to ghost
-        // switch to ghost skin
-
-        // not able to move through physical enemies
-
-        // has gravity mass of one
-        rb.gravityScale = 0;
-
-        if (debug_Mode) {
-            Debug.Log("In Ghost Mode");
-        }
-       
-        Is_human = false;
-        return;
 
     }
 }

@@ -147,26 +147,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 149606308}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b82e3bd174d67d14ba0706757b121bc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 300
-  cool_time: 3
---- !u!114 &149606314
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 149606308}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a45d19d5d6420a345a98b62ca2f5d9e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  debug_Mode: 0
+  gravity: 20.5
   speed: 200
+  cool_time: 3
 --- !u!1 &406827699
 GameObject:
   m_ObjectHideFlags: 0
@@ -963,7 +952,7 @@ TilemapCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1061,7 +1050,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1201689000905442153, guid: e8478d39b33dd4d4494ff12708cfc0d4, type: 3}
       propertyPath: m_IsTrigger
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1201689000905442153, guid: e8478d39b33dd4d4494ff12708cfc0d4, type: 3}
       propertyPath: m_AutoTiling

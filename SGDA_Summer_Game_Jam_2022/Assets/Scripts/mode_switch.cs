@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class mode_switch : MonoBehaviour
 {
+    public bool debug_Mode;
+    public float gravity = 20.5f;
     public float speed = 200;
     public float cool_time = 3.0f; //time it takes to transform
 
@@ -11,6 +13,10 @@ public class mode_switch : MonoBehaviour
     private bool Is_human = true;
     private float start_time = 0, pressed_time = 0;
     private bool check = false;
+
+
+    float horizontal;
+    float vertical;
 
     // Start is called before the first frame update
     void Start()
@@ -23,12 +29,22 @@ public class mode_switch : MonoBehaviour
 
     void Update()
     {
-       // if player is ghost and the left buttton is pressedhold for 1.5 sec
+      
+        horizontal = Input.GetAxisRaw("Horizontal");
+        // able to move 2 or 4 directions depending on mode
+        vertical = !Is_human ? Input.GetAxisRaw("Vertical") : 0;
+       
+     
+
+        // if player is ghost and the left buttton is pressedhold for 1.5 sec
         if (Input.GetMouseButtonDown(0) && !check)
         {
             start_time = Time.time;
             pressed_time = start_time + cool_time;
-            Debug.Log("Start Time: " + start_time + " ,  Pressed Time " + pressed_time);
+            if (debug_Mode) {
+                Debug.Log("Start Time: " + start_time + " ,  Pressed Time " + pressed_time);
+            }
+           
             check = true;
         }
 
@@ -44,12 +60,18 @@ public class mode_switch : MonoBehaviour
             Movement_Mode();
 
         }
+       
+        Vector2 dir = new Vector2(horizontal, vertical);
+
+        rb.velocity = dir * speed * Time.fixedDeltaTime;
+
 
     }
 
     // Determines if player in human mode or ghost mode
     void Movement_Mode()
     {
+       
 
         if (!Is_human)
         {
@@ -57,12 +79,16 @@ public class mode_switch : MonoBehaviour
             // switch to human skin
 
             // only able to move left and right two direction 
+            vertical = 0;
 
             // able to move through physical enemies
 
-            // has gravity mass of one
-            rb.gravityScale = 1;
-            Debug.Log("In Human mode");
+            // has gravity
+            rb.gravityScale = gravity;
+            if (debug_Mode) {
+                Debug.Log("In Human mode");
+            }
+           
             Is_human = true;
             return;
         }
@@ -70,13 +96,15 @@ public class mode_switch : MonoBehaviour
         // play animation from human to ghost
         // switch to ghost skin
 
-        // able to  move 4 directions
-        
         // not able to move through physical enemies
 
         // has gravity mass of one
         rb.gravityScale = 0;
-        Debug.Log("In Ghost Mode");
+
+        if (debug_Mode) {
+            Debug.Log("In Ghost Mode");
+        }
+       
         Is_human = false;
         return;
 

@@ -17,7 +17,7 @@ public class shoot_projectile : MonoBehaviour
 
         // if distance met -> enwmy met
         // fomer code was implement to take input, didn't have anything for now
-        if ()
+        if (true)
         {
             // shoot projectile
             Shoot();

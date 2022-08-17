@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class mode_switch : MonoBehaviour
 {
+    public float speed = 200;
+    public float cool_time = 3.0f; //time it takes to transform
+
     private Rigidbody2D rb;
-    private float speed = 300;
     private bool Is_human = true;
-
-    float start_time = 0, pressed_time = 0;
-    public float cool_time = 3.0f; //time it shoul take for player to switch between ghost and human mode
-    bool check = false;
-
+    private float start_time = 0, pressed_time = 0;
+    private bool check = false;
 
     // Start is called before the first frame update
     void Start()
@@ -44,20 +43,9 @@ public class mode_switch : MonoBehaviour
 
             Movement_Mode();
 
-            float horizontal = Input.GetAxisRaw("Horizontal");
-            float vertical = Input.GetAxisRaw("Vertical");
-
-            Vector2 dir = new Vector2(horizontal, vertical);
-
-            rb.velocity = dir * speed * Time.fixedDeltaTime;
-
         }
 
-
-
     }
-
-
 
     // Determines if player in human mode or ghost mode
     void Movement_Mode()
@@ -68,9 +56,12 @@ public class mode_switch : MonoBehaviour
             // play animation from human to ghost
             // switch to human skin
 
-            // only able two direction 
+            // only able to move left and right two direction 
+
             // not able to move through physical enemies
+
             // has gravity mass of one
+            rb.gravityScale = 1;
             Debug.Log("In Human mode");
 
             Is_human = true;
@@ -80,10 +71,12 @@ public class mode_switch : MonoBehaviour
         // play animation from human to ghost
         // switch to ghost skin
 
-        // only able two direction 
+        // able to  move 4 directions
+        
         // not able to move through physical enemies
-        // has gravity mass of one
 
+        // has gravity mass of one
+        rb.gravityScale = 0;
         Debug.Log("In Ghost Mode");
         Is_human = false;
         return;

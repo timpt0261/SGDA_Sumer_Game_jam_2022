@@ -146,6 +146,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4782368555100386630, guid: 0f001f6051b533a45adca19b25858345, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6779498252580597089, guid: 0f001f6051b533a45adca19b25858345, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -1441,8 +1445,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1485224257}
   - component: {fileID: 1485224256}
-  - component: {fileID: 1485224255}
   - component: {fileID: 1485224254}
+  - component: {fileID: 1485224255}
   m_Layer: 0
   m_Name: consumable
   m_TagString: Consumable
@@ -1705,8 +1709,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2039852923}
   - component: {fileID: 2039852922}
-  - component: {fileID: 2039852921}
   - component: {fileID: 2039852920}
+  - component: {fileID: 2039852921}
   m_Layer: 0
   m_Name: enemy
   m_TagString: Enemy

@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: b48af05ec61e39043bd3562a64422ca9
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Yeseva One
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: ec7318a6e8c034e46afa0c5208b28fbc, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

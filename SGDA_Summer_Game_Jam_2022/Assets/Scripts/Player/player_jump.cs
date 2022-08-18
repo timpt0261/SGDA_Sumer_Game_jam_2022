@@ -4,22 +4,29 @@ using UnityEngine;
 
 public class player_jump : MonoBehaviour
 {
-
     [SerializeField]
-    internal player_controller player_Controller;
+    internal player_input player_Input;
 
-    Rigidbody2D rb;
-    // Start is called before the first frame update
-    void Awake()
-    {
-        rb = GetComponent<Rigidbody2D>();
+
+    //Jump Configuration
+    [Range(1, 10)]
+    internal float jumpVelocity;
+
+    internal float jump_Multiplier = 2.5f;
+    internal float low_jump_Multiplier = 2.0f;
+
+   
+
+
+    // Get grounded and get ceilling
+    public void NormalJump() {
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            player_Input.rb.velocity = Vector2.up * jumpVelocity;
+        }
+        
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown("space")) { 
-            
-        }
+    public void DoubleJump() { 
+    
     }
 }

@@ -7,26 +7,43 @@ public class player_input : MonoBehaviour
     [SerializeField]
     internal player_controller player_Controller;
 
+    [SerializeField]
+    internal player_jump player_Jump;
+
     public bool debug_Mode;
+
+    
     public float gravity = 20.5f;
     public float speed = 200;
     public float cool_time = 3.0f; //time it takes to transform
 
-    private Rigidbody2D rb;
-    private BoxCollider2D bc;
+    internal SpriteRenderer sr;
+    internal Rigidbody2D rb;
+    internal BoxCollider2D bc;
+
+    //Changes character mode
     private bool Is_human = true;
-    private float start_time = 0, pressed_time = 0;
-    private bool check = false;
 
-
+    // Player movemnet
     float horizontal;
-    float vertical;
+
+    //Jump Configuration
+    [Range (1,10)]
+    internal float jumpVelocity;
+
+    internal float jump_Multiplier = 2.5f;
+    internal float low_jump_Multiplier = 2.0f;
+
+    void Awake() { 
+    
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         bc = GetComponent<BoxCollider2D>();
+        sr = GetComponent<SpriteRenderer>();
     }
 
     // Got help from forum
@@ -34,44 +51,45 @@ public class player_input : MonoBehaviour
 
     void Update()
     {
+        // In ghost Mode
+        if (!Is_human)
+        {
+
+            // Damage is double
+
+            // Double Jump active
+            player_Jump.DoubleJump();
+            
+        }
+        else {
+            // In Human Mode
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                rb.velocity = Vector2.up * jumpVelocity;
+                player_Jump.NormalJump();
+
+            }
+
+
+        }
         //gravit dependent of mode
         rb.gravityScale = Is_human ? gravity : 0;
         // able to go through walls
-        bc.isTrigger = !Is_human ? true : false;
+        //bc.isTrigger = !Is_human ? true : false;
 
         horizontal = Input.GetAxisRaw("Horizontal");
         // able to move 2 or 4 directions depending on mode
-        vertical = !Is_human ? Input.GetAxisRaw("Vertical") : 0;
-    
-       
-     
+        //vertical = !Is_human ? Input.GetAxisRaw("Vertical") : 0;
 
-        // if player is ghost and the left buttton is pressedhold for 1.5 sec
-        if (Input.GetMouseButtonDown(0) && !check)
-        {
-            start_time = Time.time;
-            pressed_time = start_time + cool_time;
-            if (debug_Mode) {
-                Debug.Log("Start Time: " + start_time + " ,  Pressed Time " + pressed_time);
-            }
-           
-            check = true;
-        }
 
-        if (Input.GetMouseButtonUp(0))
-        {
-            check = false;
-        }
-        // if the current time and the tiem the left button is 
-        if (Time.time >= pressed_time && check)
-        {
-            check = false;
 
-            Is_human = !Is_human;
-
+        // if left mouse button clicked mode is switched 
+        if (Input.GetMouseButtonDown(0)) { 
+            
+            Is_human = !Is_human; 
         }
        
-        Vector2 dir = new Vector2(horizontal, vertical);
+        Vector2 dir = new Vector2(horizontal, 0);
 
         rb.velocity = dir * speed * Time.fixedDeltaTime;
 

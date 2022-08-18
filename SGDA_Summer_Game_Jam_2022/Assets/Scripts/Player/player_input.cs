@@ -13,6 +13,7 @@ public class player_input : MonoBehaviour
     public float cool_time = 3.0f; //time it takes to transform
 
     private Rigidbody2D rb;
+    private BoxCollider2D bc;
     private bool Is_human = true;
     private float start_time = 0, pressed_time = 0;
     private bool check = false;
@@ -25,6 +26,7 @@ public class player_input : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        bc = GetComponent<BoxCollider2D>();
     }
 
     // Got help from forum
@@ -34,11 +36,13 @@ public class player_input : MonoBehaviour
     {
         //gravit dependent of mode
         rb.gravityScale = Is_human ? gravity : 0;
- 
+        // able to go through walls
+        bc.isTrigger = !Is_human ? true : false;
+
         horizontal = Input.GetAxisRaw("Horizontal");
         // able to move 2 or 4 directions depending on mode
         vertical = !Is_human ? Input.GetAxisRaw("Vertical") : 0;
-        
+    
        
      
 

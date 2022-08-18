@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class player_jump : MonoBehaviour
 {
+
+    [SerializeField]
+    internal player_controller player_Controller;
+
     Rigidbody2D rb;
     // Start is called before the first frame update
     void Awake()
@@ -15,7 +19,7 @@ public class player_jump : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown("space")) { 
-            rb.velocity.
+            
         }
     }
 }

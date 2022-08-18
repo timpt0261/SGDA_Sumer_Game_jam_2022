@@ -140,6 +140,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81ec021e928c2ea45bb9b9bd534ed0b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player_Controller: {fileID: 0}
+--- !u!114 &149606310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149606308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b91f58f476737f24da90d0bb0c3bdda7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player_Input: {fileID: 149606313}
+  player_Collsion: {fileID: 149606309}
+  health: 9
 --- !u!114 &149606313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,6 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b82e3bd174d67d14ba0706757b121bc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player_Controller: {fileID: 149606310}
   debug_Mode: 0
   gravity: 20.5
   speed: 200

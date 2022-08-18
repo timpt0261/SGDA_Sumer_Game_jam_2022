@@ -2,8 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class character_controller : MonoBehaviour
+public class player_input : MonoBehaviour
 {
+    [SerializeField]
+    internal player_controller player_Controller;
+
     public bool debug_Mode;
     public float gravity = 20.5f;
     public float speed = 200;

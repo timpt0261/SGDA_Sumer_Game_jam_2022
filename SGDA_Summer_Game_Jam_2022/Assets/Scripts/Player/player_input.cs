@@ -6,107 +6,103 @@ public class player_input : MonoBehaviour
 {
    public bool debug_Mode;
 
-    
+    public int health = 5;
     public float gravity = 20.5f;
     public float speed = 200;
+    
+   
 
     //private SpriteRenderer sr;
     private Rigidbody2D rb;
-    private Rigidbody2D rbt;
     private BoxCollider2D bc;
 
+    // For Jumping
     [SerializeField]
     private LayerMask platformLayerMask;
-    private float jumpVelocity = 100.0f;
-    private float fall_Multiplier = 2.5f;
-    private float low_jump_Multiplier = 2.0f;
+    //[SerializeField]
+    //private Transform groundCheck;
+    //public float checkRadius = .5f;
 
+    // changes character direction
+    private bool facing = true;
     //Changes character mode
     private bool Is_human = true;
 
     // Player movemnet
-    float horizontal;
+    float move_Input;
 
-
-    private void Awake() {
+    void Awake()
+    {
         rb = GetComponent<Rigidbody2D>();
-        rbt = transform.GetComponent<Rigidbody2D>();
         bc = GetComponent<BoxCollider2D>();
         //sr = GetComponent<SpriteRenderer>();
     }
 
-    // Got help from forum
-    // https://answers.unity.com/questions/815394/how-to-get-time-of-key-held-down.html
+     void FixedUpdate()
+     {
+        
+        Handle_Movement();
 
-    void FixedUpdate()
+    }
+
+    void Update()
     {
-
-        if (IsGrounded() && Input.GetKeyDown(KeyCode.Space))
-        {
-            Debug.Log("Player is jumping");
-            rbt.velocity = Vector2.up * jumpVelocity;
-        }
-
-        horizontal = Input.GetAxisRaw("Horizontal");
-
-
-
-        //// In ghost Mode
-        //if (!Is_human)
-        //{
-        //    rb.gravityScale = gravity / 2.0f;
-
-        //    // Damage is double
-
-
-
-        //}
-        //else {
-        //    // In Human Mode
-
-        //    rb.gravityScale = gravity;
-        //    // Normal Jump
-
-
-
-        //}
-
-        // able to go through walls
-        //bc.isTrigger = !Is_human ? true : false;
-
-
-        // if left mouse button clicked mode is switched 
         if (Input.GetMouseButtonDown(0))
         {
-
             Is_human = !Is_human;
         }
-
-
-        Vector2 dir = new Vector2(horizontal, 0);
-
-        rb.velocity = dir * speed * Time.fixedDeltaTime;
     }
 
     /// In control of the player's ablity to jump
 
-    //public void NormalJump()
-    //{
+    private void Handle_Movement() {
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        rb.gravityScale = gravity;
+
+        move_Input = Input.GetAxisRaw("Horizontal");
+        Vector2 dir = new Vector2(move_Input, rb.velocity.y);
+        rb.velocity = dir * Time.fixedDeltaTime * speed;
+
+        if (!facing && move_Input > 0)
+        {
+            Flip();
+        }
+        else if (facing && move_Input < 0)
+        {
+            Flip();
+        }
+
+    }
+
+
+    private void Flip()
+    {
+            facing = !facing;
+            Vector3 scaler = transform.localScale;
+            scaler.x *= -1;
+            transform.localScale = scaler;
+    }
+
+    //private void Normal_Jump() {
         
+
 
     //}
 
 
-    public void Better_Jump()
-    {
-        if (rb.velocity.y < 0)
-        {
-            rb.velocity += Vector2.up * Physics2D.gravity.y * (fall_Multiplier - 1);
+    //public void Better_Jump()
+    //{
+    //    if (rb.velocity.y < 0)
+    //    {
+    //        rb.velocity += Vector2.up * Physics2D.gravity.y * (fall_Multiplier - 1) * Time.fixedDeltaTime;
 
 
-        }
+    //    } else if (rb.velocity.y > 0) { 
 
-    }
+            
+    //    }
+
+    //}
 
     private bool IsCeiling()
     {
@@ -119,7 +115,8 @@ public class player_input : MonoBehaviour
     private bool IsGrounded()
     {
         RaycastHit2D raycastHit2D = Physics2D.BoxCast(bc.bounds.center, bc.size, 0f, Vector2.down, 1f, platformLayerMask);
-        if(debug_Mode) Debug.Log(raycastHit2D.collider + " Raycast collider intercting: " + raycastHit2D.collider != null);
+        Debug.Log(raycastHit2D.collider + " Raycast collider intercting: " + raycastHit2D.collider != null);
+        
 
         return raycastHit2D.collider != null;
     }

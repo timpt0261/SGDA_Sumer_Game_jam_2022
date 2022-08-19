@@ -38,7 +38,7 @@ public class player_input : MonoBehaviour
     // Got help from forum
     // https://answers.unity.com/questions/815394/how-to-get-time-of-key-held-down.html
 
-    void Update()
+    void FixedUpdate()
     {
 
         if (IsGrounded() && Input.GetKeyDown(KeyCode.Space))

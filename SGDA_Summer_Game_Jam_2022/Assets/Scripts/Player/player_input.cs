@@ -4,29 +4,35 @@ using UnityEngine;
 
 public class player_input : MonoBehaviour
 {
-    [SerializeField]
-    internal player_controller player_Controller;
+   public bool debug_Mode;
 
-    public bool debug_Mode;
+    
     public float gravity = 20.5f;
     public float speed = 200;
-    public float cool_time = 3.0f; //time it takes to transform
 
+    //private SpriteRenderer sr;
     private Rigidbody2D rb;
+    private Rigidbody2D rbt;
     private BoxCollider2D bc;
+
+    [SerializeField]
+    private LayerMask platformLayerMask;
+    private float jumpVelocity = 100.0f;
+    private float fall_Multiplier = 2.5f;
+    private float low_jump_Multiplier = 2.0f;
+
+    //Changes character mode
     private bool Is_human = true;
-    private float start_time = 0, pressed_time = 0;
-    private bool check = false;
 
-
+    // Player movemnet
     float horizontal;
-    float vertical;
 
-    // Start is called before the first frame update
-    void Start()
-    {
+
+    private void Awake() {
         rb = GetComponent<Rigidbody2D>();
+        rbt = transform.GetComponent<Rigidbody2D>();
         bc = GetComponent<BoxCollider2D>();
+        //sr = GetComponent<SpriteRenderer>();
     }
 
     // Got help from forum
@@ -34,47 +40,90 @@ public class player_input : MonoBehaviour
 
     void Update()
     {
-        //gravit dependent of mode
-        rb.gravityScale = Is_human ? gravity : 0;
-        // able to go through walls
-        bc.isTrigger = !Is_human ? true : false;
+
+        if (IsGrounded() && Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("Player is jumping");
+            rbt.velocity = Vector2.up * jumpVelocity;
+        }
 
         horizontal = Input.GetAxisRaw("Horizontal");
-        // able to move 2 or 4 directions depending on mode
-        vertical = !Is_human ? Input.GetAxisRaw("Vertical") : 0;
-    
-       
-     
 
-        // if player is ghost and the left buttton is pressedhold for 1.5 sec
-        if (Input.GetMouseButtonDown(0) && !check)
-        {
-            start_time = Time.time;
-            pressed_time = start_time + cool_time;
-            if (debug_Mode) {
-                Debug.Log("Start Time: " + start_time + " ,  Pressed Time " + pressed_time);
-            }
-           
-            check = true;
-        }
 
-        if (Input.GetMouseButtonUp(0))
+
+        //// In ghost Mode
+        //if (!Is_human)
+        //{
+        //    rb.gravityScale = gravity / 2.0f;
+
+        //    // Damage is double
+
+
+
+        //}
+        //else {
+        //    // In Human Mode
+
+        //    rb.gravityScale = gravity;
+        //    // Normal Jump
+
+
+
+        //}
+
+        // able to go through walls
+        //bc.isTrigger = !Is_human ? true : false;
+
+
+        // if left mouse button clicked mode is switched 
+        if (Input.GetMouseButtonDown(0))
         {
-            check = false;
-        }
-        // if the current time and the tiem the left button is 
-        if (Time.time >= pressed_time && check)
-        {
-            check = false;
 
             Is_human = !Is_human;
-
         }
-       
-        Vector2 dir = new Vector2(horizontal, vertical);
+
+
+        Vector2 dir = new Vector2(horizontal, 0);
 
         rb.velocity = dir * speed * Time.fixedDeltaTime;
+    }
 
+    /// In control of the player's ablity to jump
+
+    //public void NormalJump()
+    //{
+        
+
+    //}
+
+
+    public void Better_Jump()
+    {
+        if (rb.velocity.y < 0)
+        {
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (fall_Multiplier - 1);
+
+
+        }
 
     }
+
+    private bool IsCeiling()
+    {
+        RaycastHit2D raycastHit2D = Physics2D.BoxCast(bc.bounds.center,bc.size, 0f, Vector2.up, 1f, platformLayerMask);
+        Debug.Log(raycastHit2D);
+
+        return raycastHit2D.collider != null;
+    }
+
+    private bool IsGrounded()
+    {
+        RaycastHit2D raycastHit2D = Physics2D.BoxCast(bc.bounds.center, bc.size, 0f, Vector2.down, 1f, platformLayerMask);
+        if(debug_Mode) Debug.Log(raycastHit2D.collider + " Raycast collider intercting: " + raycastHit2D.collider != null);
+
+        return raycastHit2D.collider != null;
+    }
+
+
+    // Charge of Collsions
 }

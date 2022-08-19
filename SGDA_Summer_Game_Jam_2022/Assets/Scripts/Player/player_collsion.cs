@@ -4,19 +4,17 @@ using UnityEngine;
 
 public class player_collsion : MonoBehaviour
 {
-    [SerializeField]
-    internal player_controller player_Controller;
 
     private GameObject self;
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        
+        Process_Collsion(collision.gameObject);
 
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        Process_Collsion(collision.gameObject);
     }
 
     void Process_Collsion(GameObject gameObject) {

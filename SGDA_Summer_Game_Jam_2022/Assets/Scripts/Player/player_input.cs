@@ -6,122 +6,60 @@ public class player_input : MonoBehaviour
 {
    public bool debug_Mode;
 
-    
+    public int health = 5;
     public float gravity = 20.5f;
     public float speed = 200;
+    
+   
 
     //private SpriteRenderer sr;
     private Rigidbody2D rb;
-    private Rigidbody2D rbt;
     private BoxCollider2D bc;
 
+    // For Jumping
     [SerializeField]
     private LayerMask platformLayerMask;
-    private float jumpVelocity = 100.0f;
-    private float fall_Multiplier = 2.5f;
-    private float low_jump_Multiplier = 2.0f;
+    //[SerializeField]
+    //private Transform groundCheck;
+    //public float checkRadius = .5f;
 
     //Changes character mode
     private bool Is_human = true;
 
     // Player movemnet
-    float horizontal;
+    float move_Input;
 
-
-    private void Awake() {
+    void Awake()
+    {
         rb = GetComponent<Rigidbody2D>();
-        rbt = transform.GetComponent<Rigidbody2D>();
         bc = GetComponent<BoxCollider2D>();
         //sr = GetComponent<SpriteRenderer>();
     }
 
-    // Got help from forum
-    // https://answers.unity.com/questions/815394/how-to-get-time-of-key-held-down.html
+     void FixedUpdate()
+     {
+        move_Input = Input.GetAxisRaw("Horizontal");
+        rb.velocity = new Vector2(move_Input * speed * Time.fixedDeltaTime, rb.velocity.y);
 
-    void FixedUpdate()
+    }
+
+    void Update()
     {
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        //rb.gravityScale = gravity;
 
-        if (IsGrounded() && Input.GetKeyDown(KeyCode.Space))
+        if (move_Input > 0)
         {
-            Debug.Log("Player is jumping");
-            rbt.velocity = Vector2.up * jumpVelocity;
+            transform.eulerAngles = new Vector3(0, 0, 0);
         }
-
-        horizontal = Input.GetAxisRaw("Horizontal");
-
-
-
-        //// In ghost Mode
-        //if (!Is_human)
-        //{
-        //    rb.gravityScale = gravity / 2.0f;
-
-        //    // Damage is double
-
-
-
-        //}
-        //else {
-        //    // In Human Mode
-
-        //    rb.gravityScale = gravity;
-        //    // Normal Jump
-
-
-
-        //}
-
-        // able to go through walls
-        //bc.isTrigger = !Is_human ? true : false;
-
-
-        // if left mouse button clicked mode is switched 
+        else if (move_Input < 0)
+        {
+            transform.eulerAngles = new Vector3(0, 180, 0);
+        }
         if (Input.GetMouseButtonDown(0))
         {
-
             Is_human = !Is_human;
         }
-
-
-        Vector2 dir = new Vector2(horizontal, 0);
-
-        rb.velocity = dir * speed * Time.fixedDeltaTime;
-    }
-
-    /// In control of the player's ablity to jump
-
-    //public void NormalJump()
-    //{
-        
-
-    //}
-
-
-    public void Better_Jump()
-    {
-        if (rb.velocity.y < 0)
-        {
-            rb.velocity += Vector2.up * Physics2D.gravity.y * (fall_Multiplier - 1);
-
-
-        }
-
-    }
-
-    private bool IsCeiling()
-    {
-        RaycastHit2D raycastHit2D = Physics2D.BoxCast(bc.bounds.center,bc.size, 0f, Vector2.up, 1f, platformLayerMask);
-        Debug.Log(raycastHit2D);
-
-        return raycastHit2D.collider != null;
-    }
-
-    private bool IsGrounded()
-    {
-        RaycastHit2D raycastHit2D = Physics2D.BoxCast(bc.bounds.center, bc.size, 0f, Vector2.down, 1f, platformLayerMask);
-        if(debug_Mode) Debug.Log(raycastHit2D.collider + " Raycast collider intercting: " + raycastHit2D.collider != null);
-
-        return raycastHit2D.collider != null;
     }
 
 

@@ -23,8 +23,6 @@ public class player_input : MonoBehaviour
     //private Transform groundCheck;
     //public float checkRadius = .5f;
 
-    // changes character direction
-    private bool facing = true;
     //Changes character mode
     private bool Is_human = true;
 
@@ -40,85 +38,31 @@ public class player_input : MonoBehaviour
 
      void FixedUpdate()
      {
-        
-        Handle_Movement();
+        move_Input = Input.GetAxisRaw("Horizontal");
+        rb.velocity = new Vector2(move_Input * speed * Time.fixedDeltaTime, rb.velocity.y);
 
     }
 
     void Update()
     {
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        //rb.gravityScale = gravity;
+
+
+        //rb.velocity = dir * Time.fixedDeltaTime * speed;
+
+        if (move_Input > 0)
+        {
+            transform.eulerAngles = new Vector3(0, 0, 0);
+        }
+        else if (move_Input < 0)
+        {
+            transform.eulerAngles = new Vector3(0, 180, 0);
+        }
         if (Input.GetMouseButtonDown(0))
         {
             Is_human = !Is_human;
         }
-    }
-
-    /// In control of the player's ablity to jump
-
-    private void Handle_Movement() {
-        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        rb.gravityScale = gravity;
-
-        move_Input = Input.GetAxisRaw("Horizontal");
-        Vector2 dir = new Vector2(move_Input, rb.velocity.y);
-        rb.velocity = dir * Time.fixedDeltaTime * speed;
-
-        if (!facing && move_Input > 0)
-        {
-            Flip();
-        }
-        else if (facing && move_Input < 0)
-        {
-            Flip();
-        }
-
-    }
-
-
-    private void Flip()
-    {
-            facing = !facing;
-            Vector3 scaler = transform.localScale;
-            scaler.x *= -1;
-            transform.localScale = scaler;
-    }
-
-    //private void Normal_Jump() {
-        
-
-
-    //}
-
-
-    //public void Better_Jump()
-    //{
-    //    if (rb.velocity.y < 0)
-    //    {
-    //        rb.velocity += Vector2.up * Physics2D.gravity.y * (fall_Multiplier - 1) * Time.fixedDeltaTime;
-
-
-    //    } else if (rb.velocity.y > 0) { 
-
-            
-    //    }
-
-    //}
-
-    private bool IsCeiling()
-    {
-        RaycastHit2D raycastHit2D = Physics2D.BoxCast(bc.bounds.center,bc.size, 0f, Vector2.up, 1f, platformLayerMask);
-        Debug.Log(raycastHit2D);
-
-        return raycastHit2D.collider != null;
-    }
-
-    private bool IsGrounded()
-    {
-        RaycastHit2D raycastHit2D = Physics2D.BoxCast(bc.bounds.center, bc.size, 0f, Vector2.down, 1f, platformLayerMask);
-        Debug.Log(raycastHit2D.collider + " Raycast collider intercting: " + raycastHit2D.collider != null);
-        
-
-        return raycastHit2D.collider != null;
     }
 
 

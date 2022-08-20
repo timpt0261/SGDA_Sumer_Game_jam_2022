@@ -48,9 +48,6 @@ public class player_input : MonoBehaviour
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         //rb.gravityScale = gravity;
 
-
-        //rb.velocity = dir * Time.fixedDeltaTime * speed;
-
         if (move_Input > 0)
         {
             transform.eulerAngles = new Vector3(0, 0, 0);

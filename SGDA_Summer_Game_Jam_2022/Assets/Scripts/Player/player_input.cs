@@ -6,17 +6,19 @@ public class player_input : MonoBehaviour
 {
    
     public bool debug_Mode;
-       
+    public Animator animator;
+
 
     public int health = 5;
+    public float invulnerblity = 1.0f;
     public float gravity = 20.5f;
     public float speed = 200;
     
+    
     private SpriteRenderer sr;
     private Rigidbody2D rb;
-    [SerializeField]
-    private CapsuleCollider2D cc;
-    
+ 
+   
     // For Jumping
     public float jumpVelocity = 10.0f;
     private bool OnGround;
@@ -31,12 +33,12 @@ public class player_input : MonoBehaviour
     
 
     float move_Input;
+    int extra = 2;
     bool IsCrouching = false;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        cc = GetComponent<CapsuleCollider2D>();
         sr = GetComponent<SpriteRenderer>();
     }
 
@@ -45,13 +47,25 @@ public class player_input : MonoBehaviour
 
         HandleMovemet();
         
-
     }
 
     void Update()
     {
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        //rb.gravityScale = gravity;
+        if (Input.GetKeyDown(KeyCode.S) && !IsCrouching)
+        {
+            IsCrouching = true;
+            Debug.Log("Is crouching");
+            animator.SetBool("IsCrouching", true);
+        }
+
+        if (Input.GetKeyUp(KeyCode.S) && IsCrouching)
+        {
+            IsCrouching = false;
+            Debug.Log("Is not crouching");
+            animator.SetBool("IsCrouching", false);
+
+        }
         Jump();
         if (move_Input > 0)
         {
@@ -65,38 +79,35 @@ public class player_input : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Is_human = !Is_human;
+            // implement filter
+            //player goes through enemies
         }
     }
 
     void HandleMovemet() {
         
-        
-        if ((Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))&& IsCrouching) {
-            Debug.Log("Pressed crouch: " + cc.enabled);
-            cc.enabled = false;
-            IsCrouching = !IsCrouching;
-           
-        }
-
-        if ((Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.DownArrow)) && !IsCrouching) {
-            Debug.Log("Releasing crouch: " + cc.enabled);
-            cc.enabled = true;
-            IsCrouching = !IsCrouching;
-        }
-
         move_Input = Input.GetAxisRaw("Horizontal");
+        animator.SetFloat("speed", Mathf.Abs(move_Input));
         rb.velocity = new Vector2(move_Input * speed * Time.fixedDeltaTime, rb.velocity.y);
     }
 
     void Jump()
     {
-
+       
+        
         OnGround = Physics2D.OverlapCircle(groundCheck.position, checkRadius, platformLayerMask);
 
-        if (OnGround && Input.GetKeyDown(KeyCode.Space))
+       
+        if (OnGround && Input.GetKeyDown(KeyCode.Space) && extra >= 0)
         {
             rb.velocity = Vector2.up * jumpVelocity;
+            //animator.SetBool("IsJump", true);
         }
+
+        if (rb.velocity.y > 0)
+        {
+        }
+        else if (rb.velocity.y < 0) { }
 
     }
     // Charge of Collsions
@@ -107,12 +118,26 @@ public class player_input : MonoBehaviour
 
     }
 
+    
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Process_Collsion(collision.gameObject);
     }
 
-    void Process_Collsion(GameObject gameObject)
+
+
+    // These method are in control of the player death and spawn point 
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        
+    }
+    private void Process_Collsion(GameObject gameObject)
     {
 
         switch (gameObject.tag)
@@ -123,6 +148,7 @@ public class player_input : MonoBehaviour
                 break;
             case "Enemy":
                 DamagePlayer();
+                animator.SetBool("IsHurt", true);
                 Debug.Log("Touching Enemy");
                 break;
             case "Enviorment":
@@ -137,14 +163,16 @@ public class player_input : MonoBehaviour
             default:
                 break;
         }
-
+        return;
 
     }
 
     void DamagePlayer() {
+        animator.SetBool("IsHurt", true);
         if (health == 0) {
+            animator.SetBool("IsDead", true);
             // Go back to spawn point
-            // Make trigger to respawn smae enemy
+            // Make trigger to respawn same enemy
             return;
         }
 

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class player_input : MonoBehaviour
 {
-   public bool debug_Mode;
-
-    
+   
+    public bool debug_Mode;
+       
 
     public int health = 5;
     public float gravity = 20.5f;
@@ -14,8 +14,9 @@ public class player_input : MonoBehaviour
     
     private SpriteRenderer sr;
     private Rigidbody2D rb;
-    private BoxCollider2D bc;
-
+    [SerializeField]
+    private CapsuleCollider2D cc;
+    
     // For Jumping
     public float jumpVelocity = 10.0f;
     private bool OnGround;
@@ -27,13 +28,15 @@ public class player_input : MonoBehaviour
     private bool Is_human = true;
 
     // Player movemnet
+    
+
     float move_Input;
-    bool IsCrouching;
+    bool IsCrouching = false;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        bc = GetComponent<BoxCollider2D>();
+        cc = GetComponent<CapsuleCollider2D>();
         sr = GetComponent<SpriteRenderer>();
     }
 
@@ -49,7 +52,7 @@ public class player_input : MonoBehaviour
     {
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         //rb.gravityScale = gravity;
-        Normal_Jump();
+        Jump();
         if (move_Input > 0)
         {
             transform.eulerAngles = new Vector3(0, 0, 0);
@@ -58,6 +61,7 @@ public class player_input : MonoBehaviour
         {
             transform.eulerAngles = new Vector3(0, 180, 0);
         }
+
         if (Input.GetMouseButtonDown(0))
         {
             Is_human = !Is_human;
@@ -65,11 +69,26 @@ public class player_input : MonoBehaviour
     }
 
     void HandleMovemet() {
+        
+        
+        if ((Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))&& IsCrouching) {
+            Debug.Log("Pressed crouch: " + cc.enabled);
+            cc.enabled = false;
+            IsCrouching = !IsCrouching;
+           
+        }
+
+        if ((Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.DownArrow)) && !IsCrouching) {
+            Debug.Log("Releasing crouch: " + cc.enabled);
+            cc.enabled = true;
+            IsCrouching = !IsCrouching;
+        }
+
         move_Input = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(move_Input * speed * Time.fixedDeltaTime, rb.velocity.y);
     }
 
-    void Normal_Jump()
+    void Jump()
     {
 
         OnGround = Physics2D.OverlapCircle(groundCheck.position, checkRadius, platformLayerMask);

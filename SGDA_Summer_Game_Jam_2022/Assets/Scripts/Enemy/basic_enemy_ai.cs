@@ -57,7 +57,7 @@ public class basic_enemy_ai : MonoBehaviour
         // Once Opacity is equal to zero, destroy the object.
 
 
-        Destroy(this.gameobject);
+        Destroy(this);
 
         yield return null;
     }

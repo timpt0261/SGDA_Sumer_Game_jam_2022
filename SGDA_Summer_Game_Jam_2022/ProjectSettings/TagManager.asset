@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Projectile
   - Consumable
+  - Weapon
   layers:
   - Default
   - TransparentFX

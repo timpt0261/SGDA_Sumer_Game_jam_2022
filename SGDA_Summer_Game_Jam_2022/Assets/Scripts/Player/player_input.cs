@@ -17,12 +17,12 @@ public class player_input : MonoBehaviour
     private BoxCollider2D bc;
 
     // For Jumping
-    [SerializeField]
-    private LayerMask platformLayerMask;
-    //[SerializeField]
-    //private Transform groundCheck;
-    //public float checkRadius = .5f;
+    public float jumpVelocity = 10.0f;
 
+    private bool OnGround;
+    public Transform groundCheck;
+    public float checkRadius;
+    public LayerMask platformLayerMask;
     //Changes character mode
     private bool Is_human = true;
 
@@ -38,8 +38,9 @@ public class player_input : MonoBehaviour
 
      void FixedUpdate()
      {
-        move_Input = Input.GetAxisRaw("Horizontal");
-        rb.velocity = new Vector2(move_Input * speed * Time.fixedDeltaTime, rb.velocity.y);
+
+        HandleMovemet();
+        
 
     }
 
@@ -47,7 +48,7 @@ public class player_input : MonoBehaviour
     {
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         //rb.gravityScale = gravity;
-
+        Normal_Jump();
         if (move_Input > 0)
         {
             transform.eulerAngles = new Vector3(0, 0, 0);
@@ -62,6 +63,56 @@ public class player_input : MonoBehaviour
         }
     }
 
+    void HandleMovemet() {
+        move_Input = Input.GetAxisRaw("Horizontal");
+        rb.velocity = new Vector2(move_Input * speed * Time.fixedDeltaTime, rb.velocity.y);
+    }
 
+    void Normal_Jump()
+    {
+
+        OnGround = Physics2D.OverlapCircle(groundCheck.position, checkRadius, platformLayerMask);
+
+        if (OnGround && Input.GetKeyDown(KeyCode.Space))
+        {
+            rb.velocity = Vector2.up * jumpVelocity;
+        }
+
+    }
     // Charge of Collsions
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Process_Collsion(collision.gameObject);
+
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Process_Collsion(collision.gameObject);
+    }
+
+    void Process_Collsion(GameObject gameObject)
+    {
+
+        switch (gameObject.tag)
+        {
+            case "Consumable":
+                Debug.Log("Toughing Consumable");
+                break;
+            case "Enemy":
+                Debug.Log("Touching Enemy");
+                break;
+            case "Enviorment":
+                Debug.Log("Touching Enviorment");
+                break;
+            case "Projectile":
+                Debug.Log("Touching Projectile");
+                break;
+            default:
+                break;
+        }
+
+
+    }
 }

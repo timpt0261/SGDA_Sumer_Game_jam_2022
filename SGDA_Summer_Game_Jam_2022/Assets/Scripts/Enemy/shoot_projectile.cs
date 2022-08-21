@@ -8,9 +8,9 @@ public class shoot_projectile : MonoBehaviour
     public Transform firepoint;// empty game object where enmy is shooting from
     public GameObject projectile; // gameobject of existing projectile
     public float distance;// distance from player and enemy
-    
 
-    // Update is called once per frame    
+
+    // Update is called once per frame
     void Update()
     {
         // Detect distance from enemy
@@ -32,4 +32,3 @@ public class shoot_projectile : MonoBehaviour
     }
 
 }
-

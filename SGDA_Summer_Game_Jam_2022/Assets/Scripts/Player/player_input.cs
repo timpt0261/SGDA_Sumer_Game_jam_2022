@@ -98,20 +98,51 @@ public class player_input : MonoBehaviour
         switch (gameObject.tag)
         {
             case "Consumable":
+                HealPlayer();
                 Debug.Log("Toughing Consumable");
                 break;
             case "Enemy":
+                DamagePlayer();
                 Debug.Log("Touching Enemy");
                 break;
             case "Enviorment":
+
+                
                 Debug.Log("Touching Enviorment");
                 break;
             case "Projectile":
+                DamagePlayer();
                 Debug.Log("Touching Projectile");
                 break;
             default:
                 break;
         }
+
+
+    }
+
+    void DamagePlayer() {
+        if (health == 0) {
+            // Go back to spawn point
+            // Make trigger to respawn smae enemy
+            return;
+        }
+
+        // implement health bar
+        health--;
+
+
+    
+    }
+
+    void HealPlayer() {
+        if(health == 5) {
+            return;
+        }
+
+        // implement health bar
+        health++;
+
 
 
     }

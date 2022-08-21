@@ -23,6 +23,8 @@ public class player_crouch : MonoBehaviour
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = standing;
+
+        standing_Size = bc.size;
     }
 
     // Update is called once per frame

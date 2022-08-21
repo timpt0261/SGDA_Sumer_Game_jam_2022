@@ -6,34 +6,35 @@ public class player_input : MonoBehaviour
 {
    public bool debug_Mode;
 
+    
+
     public int health = 5;
     public float gravity = 20.5f;
     public float speed = 200;
     
-   
-
-    //private SpriteRenderer sr;
+    private SpriteRenderer sr;
     private Rigidbody2D rb;
     private BoxCollider2D bc;
 
     // For Jumping
     public float jumpVelocity = 10.0f;
-
     private bool OnGround;
     public Transform groundCheck;
     public float checkRadius;
     public LayerMask platformLayerMask;
+
     //Changes character mode
     private bool Is_human = true;
 
     // Player movemnet
     float move_Input;
+    bool IsCrouching;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         bc = GetComponent<BoxCollider2D>();
-        //sr = GetComponent<SpriteRenderer>();
+        sr = GetComponent<SpriteRenderer>();
     }
 
      void FixedUpdate()

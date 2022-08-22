@@ -10,13 +10,13 @@ public class player : MonoBehaviour
 
 
     public int health = 5;
-    
+
     public float gravity = 20.5f;
     public float speed = 200;
     public float invulnerblity = 1.0f;
 
 
-    private SpriteRenderer sr;
+    private Renderer render;
     private Rigidbody2D rb;
 
     // Player movemnet
@@ -35,6 +35,8 @@ public class player : MonoBehaviour
 
     //Changes character mode
     private bool Is_human = true;
+    [SerializeField]
+    private Color ghostColor = Color.white; 
 
    
 
@@ -43,7 +45,9 @@ public class player : MonoBehaviour
     {
         extrajumps = extraJumpsValue;
         rb = GetComponent<Rigidbody2D>();
-        sr = GetComponent<SpriteRenderer>();
+        render = GetComponent<Renderer>();
+        render.material.color = Color.white;
+
     }
 
     void FixedUpdate()
@@ -149,8 +153,17 @@ public class player : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Is_human = !Is_human;
+            
             // implement filter
             //player goes through enemies
+        }
+
+        if (Is_human)
+        {
+            render.material.color = Color.white;
+        }
+        else {
+            render.material.color = ghostColor;
         }
 
     }

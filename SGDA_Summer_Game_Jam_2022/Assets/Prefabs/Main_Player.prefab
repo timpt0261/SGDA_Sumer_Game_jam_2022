@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3127709327547287878}
   - component: {fileID: 3342754124350780141}
   - component: {fileID: 3399075229099992783}
-  - component: {fileID: 6214464468726572160}
+  - component: {fileID: 8533685037385023366}
   m_Layer: 0
   m_Name: main_sprite
   m_TagString: Untagged
@@ -135,7 +135,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &6214464468726572160
+--- !u!114 &8533685037385023366
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -148,15 +148,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug_Mode: 0
+  animator: {fileID: 0}
   health: 5
+  invulnerblity: 1
   gravity: 20.5
   speed: 200
   jumpVelocity: 10
-  groundCheck: {fileID: 7072716123567564501}
-  checkRadius: 0.3
+  groundCheck: {fileID: 0}
+  checkRadius: 0
   platformLayerMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
 --- !u!1 &2961016745884809350
 GameObject:
   m_ObjectHideFlags: 0

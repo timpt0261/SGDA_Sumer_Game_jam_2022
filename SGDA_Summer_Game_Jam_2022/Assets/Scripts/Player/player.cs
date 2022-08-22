@@ -64,10 +64,10 @@ public class player : MonoBehaviour
 
         if (OnGround)
         {
-            animator.SetBool("IsJump", false);
+            animator.SetBool("IsFarJump", false);
         }
-        else {
-            animator.SetBool("IsJump", true);
+        else{
+            animator.SetBool("IsFarJump", true);
         }
         Jump();
         Flip();

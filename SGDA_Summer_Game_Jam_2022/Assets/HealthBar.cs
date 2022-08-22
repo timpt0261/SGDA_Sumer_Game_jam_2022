@@ -1,14 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+
 public class HealthBar : MonoBehaviour
 {
-    public Slider slider;
-    public int interger;
+    public player player;
+    private Image healthBar;
+    private float currentHealth;
+    private float max_Health = 10.0f;
+    private void Awake()
+    {
+        player = GetComponent<player>();
+        healthBar = GetComponent<Image>();      
+        
+    }
 
-    public void SetHealth(int health) {
-        slider.value = health;
+    private void Update()
+    {
+        currentHealth = player.health;
+        healthBar.
     }
 }

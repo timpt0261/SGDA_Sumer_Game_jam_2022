@@ -9,7 +9,7 @@ public class player : MonoBehaviour
     public Animator animator;
 
 
-    public int health = 5;
+    public float health = 5;
 
     public float gravity = 20.5f;
     public float speed = 200;

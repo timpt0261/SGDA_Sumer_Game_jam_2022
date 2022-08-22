@@ -2,23 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class player_input : MonoBehaviour
+public class player : MonoBehaviour
 {
-   
+
     public bool debug_Mode;
     public Animator animator;
 
 
     public int health = 5;
-    public float invulnerblity = 1.0f;
+    
     public float gravity = 20.5f;
     public float speed = 200;
-    
-    
+    public float invulnerblity = 1.0f;
+
+
     private SpriteRenderer sr;
     private Rigidbody2D rb;
- 
-   
+
+    // Player movemnet
+    float move_Input;
+    bool IsCrouching = false;
+
+    private int extrajumps;
+    public int extraJumpsValue;
+
     // For Jumping
     public float jumpVelocity = 10.0f;
     private bool OnGround;
@@ -29,30 +36,52 @@ public class player_input : MonoBehaviour
     //Changes character mode
     private bool Is_human = true;
 
-    // Player movemnet
-    
+   
 
-    float move_Input;
-    int extra = 2;
-    bool IsCrouching = false;
 
-    void Awake()
+    void Start()
     {
+        extrajumps = extraJumpsValue;
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
     }
 
-     void FixedUpdate()
-     {
+    void FixedUpdate()
+    {
+        OnGround = Physics2D.OverlapCircle(groundCheck.position, checkRadius, platformLayerMask);
+
+
 
         HandleMovemet();
-        
+
     }
 
     void Update()
     {
+        Debug.Log("On the ground: " + OnGround);
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        Crouch();
+
+        if (OnGround)
+        {
+            animator.SetBool("IsJump", false);
+        }
+        else {
+            animator.SetBool("IsJump", true);
+        }
+        Jump();
+        Flip();
+        Mode_Switch();
+
+    }
+    void Crouch() {
         if (Input.GetKeyDown(KeyCode.S) && !IsCrouching)
+        {
+            IsCrouching = true;
+            Debug.Log("Is crouching");
+            animator.SetBool("IsCrouching", true);
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow) && !IsCrouching)
         {
             IsCrouching = true;
             Debug.Log("Is crouching");
@@ -66,7 +95,44 @@ public class player_input : MonoBehaviour
             animator.SetBool("IsCrouching", false);
 
         }
-        Jump();
+        else if (Input.GetKeyUp(KeyCode.DownArrow) && IsCrouching)
+        {
+            IsCrouching = false;
+            Debug.Log("Is not crouching");
+            animator.SetBool("IsCrouching", false);
+
+        }
+
+    }
+    void HandleMovemet() 
+    {
+        move_Input = Input.GetAxisRaw("Horizontal");
+        animator.SetFloat("speed", Mathf.Abs(move_Input));
+        rb.velocity = new Vector2(move_Input * speed * Time.fixedDeltaTime, rb.velocity.y);
+    }
+
+    void Jump()
+    {
+        if (OnGround) {
+            extrajumps = extraJumpsValue;
+        }
+
+        if (Input.GetKeyDown(KeyCode.W) && extrajumps > 0)
+        {
+            rb.velocity = Vector2.up * jumpVelocity;
+            extrajumps--;
+        }
+        else if (Input.GetKeyDown(KeyCode.W) && OnGround && extrajumps == 0) 
+        {
+            rb.velocity = Vector2.up * jumpVelocity;
+        }
+       
+
+
+
+    }
+    void Flip() {
+        // flips character face
         if (move_Input > 0)
         {
             transform.eulerAngles = new Vector3(0, 0, 0);
@@ -76,41 +142,19 @@ public class player_input : MonoBehaviour
             transform.eulerAngles = new Vector3(0, 180, 0);
         }
 
+    }
+
+    void Mode_Switch(){
+        // changes character mode
         if (Input.GetMouseButtonDown(0))
         {
             Is_human = !Is_human;
             // implement filter
             //player goes through enemies
         }
-    }
-
-    void HandleMovemet() {
-        
-        move_Input = Input.GetAxisRaw("Horizontal");
-        animator.SetFloat("speed", Mathf.Abs(move_Input));
-        rb.velocity = new Vector2(move_Input * speed * Time.fixedDeltaTime, rb.velocity.y);
-    }
-
-    void Jump()
-    {
-       
-        
-        OnGround = Physics2D.OverlapCircle(groundCheck.position, checkRadius, platformLayerMask);
-
-       
-        if (OnGround && Input.GetKeyDown(KeyCode.Space) && extra >= 0)
-        {
-            rb.velocity = Vector2.up * jumpVelocity;
-            //animator.SetBool("IsJump", true);
-        }
-
-        if (rb.velocity.y > 0)
-        {
-        }
-        else if (rb.velocity.y < 0) { }
 
     }
-    // Charge of Collsions
+    // Charge of Collsions at the begining
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -130,12 +174,19 @@ public class player_input : MonoBehaviour
     // These method are in control of the player death and spawn point 
     private void OnCollisionExit2D(Collision2D collision)
     {
-
+        //animator.SetBool("IsFarJump", false);
+        //animator.SetBool("IsJump", false);
+        animator.SetBool("IsHurt", false);
+        animator.SetBool("IsDead", false);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        
+        //animator.SetBool("IsFarJump", false);
+        //animator.SetBool("IsJump", false);
+        animator.SetBool("IsHurt", false);
+        animator.SetBool("IsDead", false);
+
     }
     private void Process_Collsion(GameObject gameObject)
     {
@@ -148,16 +199,16 @@ public class player_input : MonoBehaviour
                 break;
             case "Enemy":
                 DamagePlayer();
-                animator.SetBool("IsHurt", true);
+                
                 Debug.Log("Touching Enemy");
                 break;
             case "Enviorment":
-
                 
                 Debug.Log("Touching Enviorment");
                 break;
             case "Projectile":
                 DamagePlayer();
+               
                 Debug.Log("Touching Projectile");
                 break;
             default:
